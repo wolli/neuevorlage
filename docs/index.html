@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Docsify-This</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="A Remote Docsify Web app, built with the Docsify Open Publishing Starter Kit.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="assets/favicon/favicon.png">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@hibbittsdesign" />
+  <meta name="twitter:title" content="Docsify-This" />
+  <meta name="twitter:description" content="Display Markdown files as standalone web pages in seconds using Docsify, with no website required." />
+  <meta name="twitter:image" content="https://docsify-this.net/images/screenshot.png" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+  <!-- <link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css"> -->
+  <!-- <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css"> -->
+  <!-- <link rel="stylesheet" media="(prefers-color-scheme: light)" href="assets/vendor/themeable/themes/theme-simple.css"> -->
+  <!-- <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="assets/vendor/themeable/themes/theme-simple-dark.css"> -->
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+
+  <!-- Font Awesome Stylesheets -->
+  <link rel="stylesheet" href="assets/vendor/fontawesome/css/fontawesome.css" />
+  <link rel="stylesheet" href="assets/vendor/fontawesome/css/brands.css" />
+  <link rel="stylesheet" href="assets/vendor/fontawesome/css/regular.css" />
+  <link rel="stylesheet" href="assets/vendor/fontawesome/css/solid.css" />
+
+  <style>
+    :root {
+
+      --base-font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+
+      --base-line-height: 1.4;
+      --base-font-size: 1.1rem;
+
+      --cover-max-width: 45em;
+
+      --heading-h2-border-style: none;
+      --heading-h1-margin: 1rem 0rem -0.5rem 0rem;
+      --heading-h2-margin: 1rem 0rem -1.5rem 0rem;
+      --heading-h3-margin: 1rem 0rem -.5rem 0rem;
+      --heading-h4-margin: 1rem 0rem -.5rem 0rem;
+      --heading-h5-margin: 1rem 0rem -.5rem 0rem;
+      --heading-h6-margin: 1rem 0rem 0rem 0rem;
+      --heading-h1-font-size: 1.60rem;
+      --heading-h2-font-size: 1.40rem;
+      --heading-h3-font-size: 1.20rem;
+      --heading-h4-font-size: 1.15rem;
+      --heading-h5-font-size: 1.1rem;
+      --heading-h6-font-size: 1rem;
+      --heading-h1-font-weight: 400;
+      --heading-h2-font-weight: 400;
+      --heading-h3-font-weight: 400;
+      --heading-h4-font-weight: 400;
+      --heading-h5-font-weight: 400;
+      --heading-h6-font-weight: 400;
+
+      --navbar-root-color--active: #0374B5;
+      --navbar-root-margin: 0 0 0 .8em;
+
+      // --blockquote-border-color: #0374B5;
+      --blockquote-border-color: #757b7f;
+
+      --sidebar-name-color: #0374B5;
+      --sidebar-nav-link-color--active: #0374B5;
+      --sidebar-nav-link-border-color--active: #0374B5;
+      --sidebar-name-margin: 1.5rem -.2rem;
+      --sidebar-nav-link-font-weight--active: bold;
+
+      --link-color: #0374B5;
+      --link-text-decoration: underline;
+      --link-text-decoration--hover: underline;
+
+      --pagination-title-color: #0374B5;
+
+      // Link colors to match visual styling of Moodle LMS
+      // --navbar-root-color--active: #0F6CBF;
+      // --blockquote-border-color: #0F6CBF;
+      // --sidebar-name-color: #0F6CBF;
+      // --sidebar-nav-link-color--active: #0F6CBF;
+      // --sidebar-nav-link-border-color--active: #0F6CBF;
+      // --link-color: #0F6CBF;
+      // --pagination-title-color: #0F6CBF;
+
+      // Link colors to match visual styling of Sakai LMS
+      // --navbar-root-color--active: #0B1660;
+      // --blockquote-border-color: #0B1660;
+      // --sidebar-name-color: #0B1660;
+      // --sidebar-nav-link-color--active: #0B1660;
+      // --sidebar-nav-link-border-color--active: #0B1660;
+      // --link-color: #0B1660;
+      // --pagination-title-color: #0B1660;
+    }
+
+  </style>
+
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    // Enter the URL of your own GitHub Repository in between the two quotes below
+    var gitLinkRepoURL = '';
+
+    // Customize the text for your Edit this Page on GitHub link between the two quotes below
+    var editLinkText = 'Edit this Page';
+
+    // Set standalone to true to permanently hide the Sidebar
+    var standalone = !(getURLParameterByName('sidebar'));
+
+    // Set ToC to true to permanently show page Table of Contents (Sidebar must also be hidden)
+    var ToC = false;
+
+    // Get value from GET-parameter in URL
+    // @param {array}  name        Parameter-name
+    // @param {*}      isTrue      Returns this variable if "name" found
+    // @param {*}      isFalse     Returns this variable if "name" not found
+    // @param {string} url         A custom url to look in (defaults to current page URL)
+    // @param {bool}   returnValue Returns the URL Param if exists
+    // @returns {string|null}      Parameter-value
+    function getURLParameterByName(name, isTrue = null, isFalse = null, url = window.location.href, returnValue = false) {
+
+      let exists = false;
+
+      if (Array.isArray(name)) {
+
+        name.forEach(element => {
+          if (getURLParameterByName(element)) {
+            exists = true;
+          }
+        });
+
+      } else {
+
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+        var results = regex.exec(url);
+
+        exists = (results && results[2]) ? true : false;
+
+      }
+
+      if (returnValue && exists) {
+          return results[2];
+      } else if (!exists && isFalse) {
+        return isFalse;
+      }
+
+      if (exists && isTrue) {
+        return isTrue;
+      }
+
+      if (!exists && isFalse) {
+        return isFalse;
+      }
+
+      return exists;
+    }
+
+    // DOCSIFY THIS SCRIPTS
+    function openURLs(url,toc,sidebar){
+
+      if (url) {
+
+        docsifyurl = window.location.href
+        docsifyurl = docsifyurl.replace('/#/', '');
+
+        // If not Raw source URL convert it
+        if (url.includes("github.com")) {
+          var gitlinkPageURL = url;
+          url = url.replace('github.com', 'raw.githubusercontent.com');
+          url = url.replace(/\/blob/, '');
+        } else {
+          var gitlinkPageURL = '';
+        }
+
+        // Get last segment of URL
+        var lastsegment = url.split('/').pop();
+        var URLparms = '';
+
+        if (sidebar) {
+          var URLparms = `&sidebar=true`;
+        }
+
+        if (toc) {
+          var URLparms = `&toc=true`;
+        }
+
+        const cb = document.querySelector('#editCheck');
+        if (cb.checked) {
+          if (gitlinkPageURL) {
+            if (!lastsegment.includes(".md")) {
+            // No filename is present, so assume default README.md file
+            gitlinkPageURL = gitlinkPageURL + "README.md"
+            }
+            var URLparms = URLparms + `&edit-link=` + gitlinkPageURL;
+          }
+        }
+
+        if (!lastsegment.includes(".md")) {
+          // No filename is present, so assume default README.md file
+          var baseURL = docsifyurl + `?basePath=${url}` + URLparms;
+        } else {
+          if (lastsegment == "README.md") {
+            // Default is README.md so homepage parm not needed
+            url = url.substring(0, url.lastIndexOf("/"));
+            var baseURL = docsifyurl + `?basePath=${url}` + URLparms;
+          } else {
+            url = url.substring(0, url.lastIndexOf("/"));
+            var baseURL = docsifyurl + `?basePath=${url}&homepage=${lastsegment}` + URLparms;
+          }
+        }
+
+        window.open(baseURL);
+
+      } else {
+
+        alert("Please enter a Markdown File URL.");
+        selectText();
+
+      }
+
+    }
+
+    function selectText() {
+      const input = document.getElementById('text');
+      input.focus();
+      input.select();
+    }
+
+    // Docsify
+    window.$docsify = {
+      // GENERAL SETTINGS
+      // -----------------------------------------------------------------
+      name: 'Docsify-This',
+      // repo           : 'https://github.com/hibbitts-design/docsify-open-publishing-starter-kit/',
+      // Rename homepage to README.md and set homepage to README.md to default to README file for Remote Docsify
+      homepage          : 'README.md',
+      // coverpage      : 'coverpage.md',
+      loadSidebar       : !(getURLParameterByName(['standalone','embedded']) || standalone || getURLParameterByName('basePath')),
+      externalLinkTarget: '_top',
+      
+      // SIDEBAR NAVIGATION
+      // -----------------------------------------------------------------
+      auto2top: true,
+      maxLevel: 3,
+      // Set subMaxLevel to 0 to remove automatic display of page table of contents (TOC) in Sidebar
+      subMaxLevel: 2,
+      hideSidebar: (getURLParameterByName(['standalone','embedded']) || standalone || (getURLParameterByName('basePath')) && !(getURLParameterByName('sidebar'))),
+
+      // PLUGIN SETTINGS
+      // -----------------------------------------------------------------
+      pagination: {
+        previousText: 'PREV',
+        nextText: 'NEXT',
+        crossChapter: false,
+        crossChapterText: false,
+      },
+
+      // CUSTOM PLUGINS
+      // -----------------------------------------------------------------
+      plugins: [
+
+        function(hook, vm) {
+
+          hook.afterEach(function(html, next) {
+            // Invoked each time after the Markdown file is parsed.
+            // beforeEach and afterEach support asynchronous。
+            // ...
+            // call `next(html)` when task is done.
+            next(html);
+
+            if (window.$docsify['basePath']) {
+
+              // Scan for links to local Markdown files and adjust URLs to work correctly
+
+              // Get current Docsify URL without any parmarmeters
+              var url = '';
+              url = window.location.href
+              url = url.replace(/[?].*/, ''); // Strips anything after ?
+
+              var currentBasePath = '';
+              currentBasePath  = getURLParameterByName('basePath', null, null, window.location.href, true);
+
+              // Carry any existing URL parms in links
+              var URLparms = '';
+              var editThisPageLinkURLparm = ''
+
+              if (getURLParameterByName('sidebar')) {
+                URLparms = `&sidebar=true`;
+              }
+
+              if (getURLParameterByName('toc')) {
+                URLparms = `&toc=true`;
+              }
+
+              if (getURLParameterByName(['toc-alt','toc-narrow'])) {
+                URLparms = `&toc-narrow=true`;
+              }
+
+              if (getURLParameterByName('font-family')) {
+                fontfamily = getURLParameterByName('font-family', null, null, window.location.href, true);
+                URLparms = URLparms + `&font-family=` + fontfamily;
+              }
+
+              if (getURLParameterByName('link-color')) {
+                linkcolor = getURLParameterByName('link-color', null, null, window.location.href, true);
+                URLparms = URLparms + `&link-color=` + linkcolor;
+              }
+
+              if (getURLParameterByName('edit-link-top')) {
+                URLparms = URLparms + `&edit-link-top=true`;
+              }
+
+              if (getURLParameterByName('loadNavbar')) {
+                loadnavbar = getURLParameterByName('loadNavbar', null, null, window.location.href, true);
+                URLparms = URLparms + `&loadNavbar=` + loadnavbar;
+              }
+
+              const links = Array.from(document.querySelectorAll('a'))
+
+              for (const link of links) {
+                // Find any local Markdown file links
+                if (link.getAttribute('href')?.match(/^#/)) {
+                  // Modify each Markdown file link to work with Remote Docsify
+                  var lastsegment = '';
+                  lastsegment = link.getAttribute('href');
+                  lastsegment = lastsegment.replace('#/', '');
+                  lastsegment = lastsegment.replace('./', '');
+                  // Check to make sure link is not Docsify id anchor link
+                  if (lastsegment.startsWith("?id")===false) {
+                    if (getURLParameterByName('edit-link')) {
+                      // Calculate existing edit-link URL parm in link
+                      var editThisPageLinkURLparm = '';
+                      if (currentBasePath.includes("githubusercontent.com")) {
+                        var editThisPageLink = '';
+                        editThisPageLink = currentBasePath;
+                        editThisPageLink = editThisPageLink.replace('raw.githubusercontent.com', 'github.com');
+                        editThisPageLink = editThisPageLink.replace(/\/main/, '/blob/main');
+                        editThisPageLink = editThisPageLink.replace(/\/master/, '/blob/master');
+                        editThisPageLink = editThisPageLink + '/' + lastsegment + '.md'
+                        editThisPageLinkURLparm =  `&edit-link=` + editThisPageLink;
+                      }
+                    }
+                    // Update Markdown file link
+                    var newURL = ''
+                    newURL = url + `?basePath=${currentBasePath}&homepage=${lastsegment}.md` + URLparms + editThisPageLinkURLparm;
+                    link.setAttribute('href', newURL);
+                  }
+                } else {
+                    // Set '_top' as external link targets
+                    link.setAttribute('target', '_top');
+                }
+              }
+            }
+          });
+
+          hook.beforeEach(function(html) {
+
+            // Remove any possible front matter with the delimiters '---'
+            if (html.startsWith("---")) {
+              html = html.replace(/---(.|\n)*?---/, '');
+            }
+
+            if (/githubusercontent\.com/.test(vm.route.file)) {
+              url = vm.route.file
+                .replace('raw.githubusercontent.com', 'github.com')
+                .replace(/\/master/, '/blob/master')
+            } else if (window.$docsify['basePath']) {
+              url  = getURLParameterByName('edit-link', null, null, window.location.href, true);
+              gitLinkRepoURL = url;
+            } else {
+              url = gitLinkRepoURL + '/blob/main/docs/' + vm.route.file
+            }
+            var editHtml = '[:memo: ' + editLinkText + '](' + url + ')\n'
+
+            var creditHtml = '\n\n' + 'This page is displayed using <a href="https://github.com/hibbitts-design/docsify-this" target="_blank">Docsify-This</a>, based on the <a href="https://github.com/hibbitts-design/docsify-open-publishing-starter-kit" target="_blank">Docsify Open Publishing Starter Kit</a>.'
+
+            if ( !(getURLParameterByName(['standalone','embedded'])) && !(getURLParameterByName('hidegitlink'))  && (!!gitLinkRepoURL)) {
+              if ( !(getURLParameterByName('hide-credits'))) {
+                if (getURLParameterByName('edit-link-top')) {
+                  return editHtml + '\n' + html + '<br />' + '\n\n' + '<hr>' + creditHtml
+                } else {
+                  return html + '<br /><br />' + '\n\n' + editHtml + '\n\n' + '<hr>' + creditHtml
+                }
+              } else {
+                  if (getURLParameterByName('edit-link-top')) {
+                    return editHtml + '\n' + html
+                  } else {
+                    return  html + '<br />' + '\n\n' + editHtml
+                  }
+              }
+
+            } else if ( getURLParameterByName(['standalone','embedded']) && !(getURLParameterByName('hidegitlink')) && (!!gitLinkRepoURL)) {
+                if (getURLParameterByName('edit-link-top')) {
+                  return editHtml + '\n' + html
+                } else {
+                  return html + '<br />' + '\n\n' + editHtml
+                }
+
+            } else {
+              return html
+            }
+          });
+
+        }
+
+      ]
+    }
+
+    <!-- Credit to Beau Shaw for dymamic remote docsify technique -->
+    <!-- To render a Markdown file named **README.md** (the expected default name) the URL would be https://hibbitts-design.github.io/test-docsify-project-docs/?basePath=https://raw.githubusercontent.com/hibbitts-design/docsify-open-course-starter-kit/main -->
+    const params = new URLSearchParams(window.location.search);
+    params.forEach((value, key) => {
+      // TODO: Parse numbers?
+      window.$docsify[key] = value;
+    });
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <!-- <script src="assets/vendor/docsify/docsify.min.js"></script> -->
+
+  <!-- Adjust Page Margins When Standalone or Embedded -->
+  <script>
+    if (getURLParameterByName(['standalone','embedded']) || standalone) {
+      var editCSS = document.createElement('style')
+      editCSS.innerHTML = ".markdown-section {padding: 1rem 10px;}";
+      document.body.appendChild(editCSS);
+    }
+  </script>
+
+  <!-- Customizable Theme -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
+  <!-- <script src="assets/vendor/themeable/docsify-themeable.min.js"></script> -->
+
+  <!-- Emoji Plugin -->
+  <script src="https://unpkg.com/docsify/lib/plugins/emoji.min.js"></script>
+  <!-- <script src="assets/vendor/docsify/plugins/emoji.min.js"></script> -->
+
+  <!-- Font Awesome Plugin -->
+  <script src="https://unpkg.com/docsify-fontawesome/dist/docsify-fontawesome.min.js"></script>
+  <!-- <script src="assets/vendor/docsify/plugins/docsify-fontawesome.min.js"></script> -->
+
+  <!-- Table of Contents Plugin -->
+  <script>
+    if (getURLParameterByName('toc') || ToC) {
+      document.write('<link rel="stylesheet" type="text/css" href="assets/css/toc.css" />');
+      document.write('<script src="assets/js/toc.js"><\/script>');
+    }
+    if (getURLParameterByName(['toc-alt','toc-narrow'])) {
+      document.write('<link rel="stylesheet" type="text/css" href="assets/css/toc-narrow.css" />');
+      document.write('<script src="assets/js/toc.js"><\/script>');
+    }
+  </script>
+
+  <!-- Hide Sidebar app title when displaying remote site  -->
+  <script>
+    if (window.$docsify['basePath']) {
+      document.write('<link rel="stylesheet" type="text/css" href="assets/css/hide-sidebar-appname.css" />');
+    }
+  </script>
+
+  <!-- Change body font if fontFamily parameter present  -->
+  <script>
+    fontfamily  = getURLParameterByName('font-family', null, null, window.location.href, true);
+    if (!(fontfamily === false) && !(window.$docsify['basePath'] === undefined)) {
+      fontfamily = decodeURI(fontfamily);
+      document.documentElement.style.setProperty('--base-font-family', fontfamily);
+    }
+  </script>
+
+  <!-- Change link color if link-color parameter present  -->
+  <script>
+    linkcolor  = getURLParameterByName('link-color', null, null, window.location.href, true);
+    if (!(linkcolor === false) && !(window.$docsify['basePath'] === undefined)) {
+      linkcolor = '#' + linkcolor
+      document.documentElement.style.setProperty('--navbar-root-color--active', linkcolor);
+      document.documentElement.style.setProperty('--blockquote-border-color', linkcolor);
+      document.documentElement.style.setProperty('--sidebar-name-color', linkcolor);
+      document.documentElement.style.setProperty('--sidebar-nav-link-color--active', linkcolor);
+      document.documentElement.style.setProperty('--sidebar-nav-link-border-color--active', linkcolor);
+      document.documentElement.style.setProperty('--link-color', linkcolor);
+      document.documentElement.style.setProperty('--pagination-title-color', linkcolor);
+    }
+  </script>
+
+  <script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics, only loaded for local docsify-this.net pages -->
+
+  <script>
+    if ((location.hostname.includes("docsify-this.net")) && (window.$docsify['basePath'] === undefined)) {
+      document.write('<script async src="https://www.googletagmanager.com/gtag/js?id=UA-19424343-37"><\/script>');
+    }
+  </script>
+
+  <script>
+    if ((location.hostname.includes("docsify-this.net")) && (window.$docsify['basePath'] === undefined)) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-19424343-37');
+    }
+  </script>
+
+  <!-- Check for Return Key in URL Builder field -->
+  <script>
+    if (window.$docsify['basePath'] === undefined) {
+      function checkKey(e){
+       var key=e.keyCode || e.which;
+        if (key==13){
+           document.getElementById("btn_1").click();
+        }
+      }
+    }
+  </script>
+
+</body>
+
+</html>
